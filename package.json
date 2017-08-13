@@ -1,0 +1,12 @@
+{
+   "name": "movie-db",
+   "version": "1.0.0",
+   "author": "Kamil Armatys",
+   "scripts": {
+      "test": "grunt",
+   },
+   "devDependencies": {
+      "grunt": "^1.0.1",
+      "grunt-contrib-jasmine": "^1.1.0"
+   }
+}
