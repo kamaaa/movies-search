@@ -127,18 +127,24 @@
     * - action {string} defines how many items are needed
     * - type   {string} determines what kind of data is requested [movie, tv, person, all of them]
     * - query  {string} /only when action = list/
+    * - page   {number} /only when action = list/
     * - id     {number} /only when action = single/
     *
     * @param {Object} options - specifies request arguments
     *
     * @return {string} url ready to use
+    * @throws {ReferenceError}
    */
    App.prototype._buildQuery = function(options){
       var dataURL = "https://api.themoviedb.org/3/";
       
+      if(!options.action || !options.type){
+         throw new ReferenceError("Action or type is not defined");
+      }
+      
       switch(options.action){
         case "list":
-            dataURL += 'search/' + options.type + '?api_key=' + this._apiKey + '&query=' + decodeURIComponent(options.query) + '&page=' + (options.page || 1);
+            dataURL += 'search/' + options.type + '?api_key=' + this._apiKey + '&query=' + encodeURIComponent(options.query) + '&page=' + (options.page || 1);
             break;
         case "single":
             dataURL += options.type + '/' + options.id + '?api_key=' + this._apiKey;

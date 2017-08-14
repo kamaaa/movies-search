@@ -3,7 +3,7 @@
    "version": "1.0.0",
    "author": "Kamil Armatys",
    "scripts": {
-      "test": "grunt",
+      "test": "grunt"
    },
    "devDependencies": {
       "grunt": "^1.0.1",
