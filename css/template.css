@@ -246,6 +246,10 @@ strong {
    display: block;
    padding: 5px 0;
 }
+#filters a.active{
+   font-weight: bold;
+   color: #b22222;
+}
 #filters a:hover{
    color: #b22222;
 }

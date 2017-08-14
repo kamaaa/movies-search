@@ -66,9 +66,16 @@
       var self = this;
       
       function onSubmit(e){
+         // reset filters
+         if(self._filters){
+            self._filters.querySelector('.active').classList.remove('active');
+            self._filters.children[0].children[0].classList.add('active');
+         }
+         
          // send request
          self._request = { action: "list", type: "multi", query: this.children[0].value };
          self._renderList();
+         
          e.preventDefault();
       }
       
@@ -80,6 +87,10 @@
       
       function onFiltersClick(e){
          if(e.target.tagName !== "A") return false;
+         
+         e.currentTarget.querySelector('.active').classList.remove('active');
+         e.target.classList.add('active');
+         
          self._request.type = e.target.hash.substring(1);
          self._renderList();
          e.preventDefault();
@@ -249,10 +260,11 @@
          // add pagination
          self._addPagination(data);
          
-         // update DOM
+         // update view
          return self._updateList(data);
       }).then(function(){
          // add event to list container
+         
          
          // show loaded content
          self.openPage(req.action);
@@ -266,6 +278,26 @@
       
       // store request
       this._request = req;
+   };
+   
+   App.prototype._renderSingle = function(){
+      var req  = this._request,
+          url  = this._buildQuery(req),
+          self = this;
+      
+      // show preloader
+      this._startPreloader();
+      
+      this._getData(url).then(function(data){
+         return self._updateSingle(data);
+      }).then(function(){
+         self.openPage(req.action);
+      }).catch(function(err){
+         console.log(err);
+      }).then(function(){
+         // hide preloader
+         self._stopPreloader();
+      });
    };
    
    /**
@@ -340,6 +372,10 @@
          parent.appendChild(dfItem);
          
       });
+   };
+   
+   App.prototype._updateSingle = function(data){
+      
    };
    
    /**
