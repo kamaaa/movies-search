@@ -18,7 +18,7 @@
                    <path d="M0 0h24v24H0z" fill="none"/></svg>
                </button>
             </form>
-            <ul id="h-search-result">
+            <ul id="h-search-result" style="display: none">
                <li><a id="1234" href="#">
                   <img src="http://image.tmdb.org/t/p/w154/bgSHbGEA1OM6qDs3Qba4VlSZsNG.jpg">
                   <p><strong>Transformers big title</strong> <span class="sub-title">2010 &middot; movie</span></p>
@@ -34,8 +34,7 @@
             </ul>
          </div>
       </div>
-      <div class="progress">
-         <div class="indeterminate"></div>
+      <div id="preloader" class="progress">
       </div>
    </header>
    <main id="main">
@@ -57,11 +56,11 @@
                </div>
                <div class="m-center">
                   <h2>Results <a class="back-btn" href="#welcome">back</a></h2>
-                  <div id="result-list"></div>
+                  <div class="result-items" data-target="list"></div>
                </div>
             </div>
             <div id="single" class="page">
-               <h2>Tytuł: <span class="item-name">Transformers</span><a class="back-btn" href="#list">back</a></h2>
+               <h2>Title: <span class="item-name">Transformers</span><a class="back-btn" href="#list">back</a></h2>
                <div class="item-image"><img src="http://image.tmdb.org/t/p/w300/bgSHbGEA1OM6qDs3Qba4VlSZsNG.jpg"></div>
                <div class="item-details">
                   <section class="item-sect">
@@ -83,5 +82,12 @@
       </div>
    </footer>
    <script src="js/app.js" type="text/javascript"></script>
+   <script type="text/javascript">
+      var app = new App();
+      app.init({
+         inputForm: "h-form", // ID for input form
+         result:    "pages"   // ID for result pages (parent node for #list and #single)
+      });
+   </script>
 </body>
 </html>
