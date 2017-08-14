@@ -50,6 +50,7 @@
       // optional references
       this._preloader  = document.getElementById("preloader");
       this._pagination = document.getElementById("pagination");
+      this._filters    = document.getElementById("filters");
       
       // reference to current active page
       this._activePage = this._resultPages.querySelector('page-active') || this._resultPages.children[0];
@@ -77,6 +78,13 @@
          e.preventDefault();
       }
       
+      function onFiltersClick(e){
+         if(e.target.tagName !== "A") return false;
+         self._request.type = e.target.hash.substring(1);
+         self._renderList();
+         e.preventDefault();
+      }
+      
       function onPaginationClick (e){
          var target = e.target;
          if(target.nodeName !== "A") return false;
@@ -99,6 +107,10 @@
       
       if(this._pagination){
          this._pagination.addEventListener("click", onPaginationClick);
+      }
+      
+      if(this._filters){
+         this._filters.addEventListener("click", onFiltersClick);
       }
       
       // capture submit event
@@ -269,6 +281,7 @@
           link      = document.createElement('a'),
           imgLength = data.results.length,
           imgLoaded = 0,
+          mediaType = "",
           self      = this,
           clone;
       
@@ -294,11 +307,14 @@
 
          for(var i=0; i<imgLength; i++){
             clone = link.cloneNode(true);
-
+            
+            // item media type
+            mediaType = data.results[i].media_type || self._request.type;
+            
             // url href
-            clone.href = "#"+ data.results[i].media_type + ":" + data.results[i].id;
+            clone.href = "#"+ mediaType + ":" + data.results[i].id;
 
-            switch(data.results[i].media_type){
+            switch(mediaType){
                case "movie":
                   clone.children[0].src = self.getImageURL(154, data.results[i].poster_path);
                   clone.children[1].textContent = data.results[i].title;
