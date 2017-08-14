@@ -48,8 +48,8 @@
       }
       
       // optional references
-      this._preloader = document.getElementById("preloader");
-      
+      this._preloader  = document.getElementById("preloader");
+      this._pagination = document.getElementById("pagination");
       
       // reference to current active page
       this._activePage = this._resultPages.querySelector('page-active') || this._resultPages.children[0];
@@ -66,7 +66,8 @@
       
       function onSubmit(e){
          // send request
-         self._renderList({ action: "list", type: "multi", query: this.children[0].value });
+         self._request = { action: "list", type: "multi", query: this.children[0].value };
+         self._renderList();
          e.preventDefault();
       }
       
@@ -76,11 +77,29 @@
          e.preventDefault();
       }
       
+      function onPaginationClick (e){
+         var target = e.target;
+         if(target.nodeName !== "A") return false;
+         
+         e.currentTarget.querySelector('.active').classList.remove('active');
+         target.classList.add('active');
+         
+         // change page and update view
+         self._request.page = target.hash.split(":")[1];
+         self._renderList();
+         
+         e.preventDefault();
+      }
+      
       // find all back buttons and add events
       var backBtns = Array.prototype.slice.call(document.querySelectorAll('.back-btn'));
       backBtns.forEach(function(elem){
          elem.addEventListener("click", onClickBack);
       });
+      
+      if(this._pagination){
+         this._pagination.addEventListener("click", onPaginationClick);
+      }
       
       // capture submit event
       this._inputForm.addEventListener("submit", onSubmit);
@@ -179,23 +198,52 @@
    };
    
    /**
-    * 
+    * Hide page before content will be updated.
+    *
+    * @param {string} next - name of next page
+    *
+    * @return {Promise}
     */
-   App.prototype._renderList = function(req){
-      var url  = this._buildQuery(req),
+   App.prototype.hidePage = function(next){
+      var resolve = (function(resolve){
+         if(this._activePage.id !== next) return resolve();
+                                                 
+         this._activePage.classList.remove('page-active');
+         window.setTimeout(function(){
+            resolve();
+         }, 500);
+      }).bind(this);
+      
+      return new Promise(resolve);
+   };
+   
+   /**
+    * Show search results
+    *
+    * @param {Object} req - request
+    */
+   App.prototype._renderList = function(){
+      var req  = this._request,
+          url  = this._buildQuery(req),
           self = this;
       
       // show preloader
       this._startPreloader();
       
-      // send request
-      this._getData(url).then(function(data){
+      this.hidePage(req.action).then(function(){
+         // send request
+         return self._getData(url);
+      }).then(function(data){
+         // add pagination
+         self._addPagination(data);
+         
          // update DOM
          return self._updateList(data);
       }).then(function(){
+         // add event to list container
+         
          // show loaded content
-         self.openPage('list');
-         console.log("complete!");
+         self.openPage(req.action);
       }).catch(function(err){
          // display errors
          console.log(err);
@@ -209,7 +257,11 @@
    };
    
    /**
-    * 
+    * Update search result
+    *
+    * @param {Object} data - fetched data from database
+    *
+    * @return {Promise}
     */
    App.prototype._updateList = function(data){
       var parent    = this._resultList,
@@ -290,6 +342,37 @@
       if(!this._preloader) return false;
       this._preloader.removeChild(this._preloader.firstChild);
       return true;
+   };
+   
+   /**
+    * Generate pagination 
+    *
+    * @param {Object} data - fetched data from database
+    */
+   App.prototype._addPagination = function(data){
+      if(this._pagination.children.length === data.total_pages){
+         return;
+      } else{
+         this._empty(this._pagination);
+         
+         if(data.total_pages === 1){
+            return;
+         }
+      }
+      
+      var items = "",
+          active;
+      
+      // render pagination
+      for(var i=0; i<data.total_pages; i++){
+         items += "<li><a href=\"#page:"+(i+1)+"\">" + (i+1) + "</a></li>";
+      }
+
+      // add to document
+      this._pagination.innerHTML = items;
+
+      active = this._pagination.firstChild.firstChild;
+      active.className = 'active';
    };
    
    /**

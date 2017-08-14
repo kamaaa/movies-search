@@ -280,20 +280,20 @@ strong {
 }
 
 /* ------- PAGINATION -------- */
-.pagination{
+#pagination{
    text-align: center;
    margin: 10px 0;
    cursor: default;
 }
-.pagination li{
+#pagination li{
    display: inline-block;
 }
-.pagination li a{
+#pagination li a{
    background-color: #ddd;
    display: block;
    padding: 5px 9px;
 }
-.pagination li a:hover, .pagination li a.active{
+#pagination li a:hover, #pagination li a.active{
    background-color:  #b22222;
    color: #fff;
 }
