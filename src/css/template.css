@@ -57,6 +57,7 @@ body {
    color: #000;
    position: relative;
    padding-bottom: 50px;
+   overflow-y: scroll;
 }
 
 h1 {
@@ -196,6 +197,7 @@ strong {
 #main h2{
    border-bottom: 1px solid;
    margin-bottom: 20px;
+   padding-right: 40px;
    position: relative;
 }
 .back-btn{
@@ -256,6 +258,9 @@ strong {
 .result-items{
    text-align: center;
 }
+.result-items.empty-page{
+   text-align: left;
+}
 .result-items a {
    display: inline-block;
    margin: 0 14px;
@@ -266,18 +271,32 @@ strong {
    text-align: center;
 }
 /* ------ ITEM SECTION ------- */
+.title-tag{
+   font-size: 14px;
+   margin-left: 5px;
+}
 .item-name{
    font-weight: bold;
 }
-.item-image{
-   float: left;
-}
-.item-details{
-   max-width: 100%;
-   margin-left: 325px;
-}
 .item-sect p{
    margin-top: 5px;
+}
+.item-image{
+   background-color: #f8f8f8;
+   text-align: center;
+   margin-bottom: 30px;
+}
+.item-image img{
+   display: inline-block;
+}
+@media (min-width: 600px){
+   .item-image{
+      background-color: transparent;
+      text-align: left;
+   }
+   .item-image img{
+      display: block;
+   }
 }
 
 /* ------- PAGINATION -------- */

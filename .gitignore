@@ -1,2 +1,4 @@
+build/css
+build/js
 node_modules/
 package-lock.json
