@@ -2,6 +2,12 @@
    "name": "movie-db",
    "version": "1.0.0",
    "author": "Kamil Armatys",
+   "repository": {
+        "type": "git",
+        "url": "https://github.com/kamaaa/movies-search.git",
+        "branch": "",
+        "SHA": ""
+    },
    "scripts": {
       "test": "grunt",
       "postinstall": "grunt build"
